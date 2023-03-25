@@ -40,7 +40,7 @@ mymap.show_ports()
 
 
 <div align="center">
-<img src="./docs/cyberpunk_ports.png" width="700">
+<img src="./docs/cyberpunk_ports.png" width="1000">
 </div>
 
 Or to plot all the worlds airports:
@@ -54,7 +54,7 @@ mymap.show_airports()
 ```
 
 <div align="center">
-<img src="./docs/cyberpunk_airports.png" width="700">
+<img src="./docs/cyberpunk_airports.png" width="1000">
 </div>
 
 
