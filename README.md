@@ -56,3 +56,13 @@ mymap.show_airports()
 <div align="center">
 <img src="./saved_plots/cyberpunk_airports.png" width="700">
 </div>
+
+
+
+
+## Acknowledgements
+
+
+Country shapefiles obtained from: https://public.opendatasoft.com/explore/dataset/world-administrative-boundaries/export/
+
+Shapefiles for airports, ports and urban areas were obtained from: https://www.naturalearthdata.com/downloads/
