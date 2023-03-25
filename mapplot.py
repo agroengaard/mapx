@@ -26,7 +26,7 @@
 
 import aulibrary as au 
 
-#import geopandas as gpd'
+
 import os
 import numpy as np
 
@@ -41,18 +41,6 @@ from matplotlib.patches import Polygon
 # 
 # =============================================================================
 
-#C:/Users/ander/Downloads/ne_10m_urban_areas
-#shapefile = gpd.read_file("./shapefiles/ne_10m_ports/ne_10m_ports.shp")
-#print(shapefile)
-
-# =============================================================================
-# shapefile = gpd.read_file("./data/urban/DNK/DNK_core.shp")
-# print(shapefile)
-# shapefile = gpd.read_file("./data/urban/DNK/DNK_core_commuting.shp")
-# print(shapefile)
-# =============================================================================
-#eua = gpd.read_file("./data/Europe_Urban_Areas/Europe_Urban_Areas.shp")
-#print(eua)
 
 class MapPlot:
     """
@@ -137,6 +125,7 @@ class MapPlot:
         """
         if self.place == "Europe":
             self.mapmode = {'definition': 'center_and_height_width',
+                            'figsize': (12,12),
                             'width': 4000000,
                             'height': 4000000,
                             'lat_0': 54,
@@ -246,7 +235,7 @@ class MapPlot:
                 PatchCollection(_patches, 
                                 facecolor=au.AUblue2, 
                                 edgecolor='None',
-                                alpha=0.7, 
+                                alpha=0.4, 
                                 linewidths=1, 
                                 zorder=1))  
  
@@ -277,11 +266,11 @@ class MapPlot:
                           
         self.ax.add_collection(
             PatchCollection(self._cis, facecolor=au.AUpink, 
-                            edgecolor='None', alpha=0.7, 
+                            edgecolor='None', alpha=0.4, 
                             linewidths=1, zorder=1))               
         self.ax.add_collection(
             PatchCollection(self._cis_associated, facecolor=au.AUpink3, 
-                            edgecolor='None', alpha=0.7, 
+                            edgecolor='None', alpha=0.4, 
                             linewidths=1, zorder=1))      
  
  
@@ -348,8 +337,8 @@ class MapPlot:
             self.polygon_shapes.append(Polygon(np.array(s), True))
     
         self.ax.add_collection(
-            PatchCollection(self.polygon_shapes, facecolor=au.AUyellow, 
-                            edgecolor='None', alpha=0.95, 
+            PatchCollection(self.polygon_shapes, facecolor="#F3E600", 
+                            edgecolor='None', alpha=0.75, 
                             linewidths=1, zorder=2))
         
         
