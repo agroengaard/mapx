@@ -29,10 +29,30 @@
 
 ## Examples
 
-<div align="center">
-<img src="./saved_plots/cyberpunk_airports.png" width="700">
-</div>
+For example, to plot all the worlds harbors/ports:
+```python
+from mapplot import MapPlot
+
+mymap = MapPlot(style="cyberpunk")
+mymap.show_ports()
+ 
+```
+
 
 <div align="center">
 <img src="./saved_plots/cyberpunk_ports.png" width="700">
+</div>
+
+Or to plot all the worlds airports:
+
+```python
+from mapplot import MapPlot
+
+mymap = MapPlot(style="cyberpunk")
+mymap.show_airports()
+ 
+```
+
+<div align="center">
+<img src="./saved_plots/cyberpunk_airports.png" width="700">
 </div>
