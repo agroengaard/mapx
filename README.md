@@ -40,7 +40,7 @@ mymap.show_ports()
 
 
 <div align="center">
-<img src="./saved_plots/cyberpunk_ports.png" width="700">
+<img src="./docs/cyberpunk_ports.png" width="700">
 </div>
 
 Or to plot all the worlds airports:
@@ -54,9 +54,24 @@ mymap.show_airports()
 ```
 
 <div align="center">
-<img src="./saved_plots/cyberpunk_airports.png" width="700">
+<img src="./docs/cyberpunk_airports.png" width="700">
 </div>
 
+
+Or to plot all the worlds urban areas and save the image as a png in the "saved_plots" folder:
+
+```python
+from mapplot import MapPlot
+
+mymap = MapPlot(place="Europe", style="cyberpunk")
+mymap.show_urban_areas()
+mymap.save("urban")
+ 
+```
+
+<div align="center">
+<img src="./docs/urban.png" width="700">
+</div>
 
 
 
