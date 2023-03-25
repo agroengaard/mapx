@@ -58,19 +58,19 @@ mymap.show_airports()
 </div>
 
 
-Or to plot all the worlds urban areas and save the image as a png in the "saved_plots" folder:
+Or to plot all the worlds urban areas on a dark theme and save the image as a png in the "saved_plots" folder:
 
 ```python
 from mapplot import MapPlot
 
-mymap = MapPlot(place="Europe", style="cyberpunk")
+mymap = MapPlot(place="Europe", style="dark")
 mymap.show_urban_areas()
 mymap.save("urban")
  
 ```
 
 <div align="center">
-<img src="./docs/urban.png" width="700">
+<img src="./docs/dark_urban.png" width="700">
 </div>
 
 
