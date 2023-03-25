@@ -70,7 +70,7 @@ mymap.save("urban")
 ```
 
 <div align="center">
-<img src="./docs/cyberpunk_airports.png" width="700">
+<img src="./docs/urban.png" width="700">
 </div>
 
 
