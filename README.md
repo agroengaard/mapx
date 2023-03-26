@@ -77,6 +77,7 @@ mymap.save("urban")
 
 Some of the geometric country centroids that define the placement of country network nodes have been manually edited for aesthetic reasons (for example, the geometric centroid of Norway is inside Sweden, or the geometric centroid of Portugal is in the Atlantic Ocean). The centroids that have been edited are:
 - Norway
+- Sweden
 - Portugal
 
 ## Acknowledgements
