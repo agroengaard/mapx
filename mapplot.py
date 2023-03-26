@@ -28,19 +28,23 @@ import aulibrary as au
 
 
 import os
+import json
 import numpy as np
+import networkx as nx
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Polygon
 
-
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 # =============================================================================
 # 
 # =============================================================================
 
+ 
+ 
 
 class MapPlot:
     """
@@ -111,6 +115,11 @@ class MapPlot:
         
         
     def save(self, filename):
+        """
+        -----------------------------------------------------------------------
+        | Method for saving the plot                                          |
+        -----------------------------------------------------------------------
+        """
         self.output_folder = "./saved_plots/"
         self.output_path = os.path.join(self.output_folder, filename+".png")
         plt.savefig(self.output_path, bbox_inches='tight', pad_inches=-0.1)
@@ -281,18 +290,21 @@ class MapPlot:
         
     def _load_urban_shapefiles(self):
         print("Loading urban shapefiles...")
-        self.m.readshapefile("./shapefiles/ne_10m_urban_areas/ne_10m_urban_areas",'urban', drawbounds=False)
+        self.m.readshapefile("./shapefiles/ne_10m_urban_areas/ne_10m_urban_areas",
+                             'urban', drawbounds=False)
         print("Urban shapefiles loaded")
    
  
     def _load_ports(self):
         print("Loading port shapefiles...")
-        self.m.readshapefile("./shapefiles/ne_10m_ports/ne_10m_ports",'ports', drawbounds=False)
+        self.m.readshapefile("./shapefiles/ne_10m_ports/ne_10m_ports",
+                             'ports', drawbounds=False)
         print("Urban port loaded")
         
     def _load_airports(self):
         print("Loading airport shapefiles...")
-        self.m.readshapefile("./shapefiles/ne_10m_airports/ne_10m_airports",'airports', drawbounds=False)
+        self.m.readshapefile("./shapefiles/ne_10m_airports/ne_10m_airports",
+                             'airports', drawbounds=False)
         print("Airports loaded")
            
     def show_ports(self):
@@ -433,15 +445,140 @@ class MapPlot:
                             linewidths=1, zorder=1))
 
 
-
-
-
+    def _load_country_centroids(self):
+        
+        with open('./data/country_centroids.json') as json_file:
+            self._country_o = json.load(json_file)
+ 
+        
+ 
+# =============================================================================
+#     def _i_make_piesss(self, n_pie):
+#         x_y = n_centroids.loc[n_pie].values
+#         x1, y1 = self.m(x_y[0], x_y[1])
+#         axins = inset_axes(self.ax, width=0.5, height=0.5, bbox_to_anchor=(x1, y1), loc='center',
+#                            bbox_transform=self.ax.transData, borderpad=0)
+#         pie_scale=2
+#         patches, texts = axins.pie(tech[n_pie], radius=(np.sqrt((data[n_pie]*pie_scale)/(np.pi*100))),
+#                                                 colors=[color_cat.get(x, '#333333') for x in tech.index],
+#                                                 wedgeprops={'alpha': 0.9} )
+#         return patches, texts
+#     
+#     def add_node_pie_charts(self, n):
+#     
+#         for n_pie in n:
+#             pie_slices, texts = self._i_make_piesss(n_pie)   
+#  
+# =============================================================================
+    
+ 
+    def add_country_network(self, country_links):
+        """
+        -----------------------------------------------------------------------
+        | Method for drawing a network of countries onto the map plot         |
+        -----------------------------------------------------------------------
+        | INPUT:                                                              |
+        |    country_links (list): List of country links as a list of tuples  |
+        |                          containing iso3 codes, for example:        |
+        |                          [("DEU", "FRA"), ("FRA", "ESP")]           |
+        -----------------------------------------------------------------------
+        """
+        self._load_country_centroids()
+        
+   
+        def flatten(l):
+            return [item for sublist in l for item in sublist]
+        
+        nx_countries = list(set(flatten(country_links)))
+        nx_country_centroids = [self._country_o[i] for i in nx_countries]
+        print(nx_country_centroids)
+        
+        nx_ctry_o_x = [o[0] for o in nx_country_centroids]
+        nx_ctry_o_y = [o[1] for o in nx_country_centroids]
+        [MX, MY] = self.m(nx_ctry_o_x, nx_ctry_o_y)
+        posm = dict(zip(nx_countries, list(map(list, zip(MX, MY)))))
+        
+ 
+        G = nx.DiGraph()
+ 
+        [G.add_node(n) for n in nx_countries]
+        
+        nx.draw_networkx_nodes(G, posm, node_color=au.AUlightblue, 
+                               node_size=200, alpha=1, ax=self.ax)
+ 
+        for j in range(len(country_links)):
+            G.add_edge(country_links[j][0], country_links[j][1], weight=2)
+      
+        weights = [G[u][v]['weight'] for u, v in G.edges()]
+ 
+        nx.draw_networkx_edges(G, posm, edge_color=au.AUlightblue, 
+                               width=weights, alpha=1.0, arrows=False,
+                                ax=self.ax)
+ 
 if __name__ == "__main__":
 
-    mymap = MapPlot(style="cyberpunk")
-    mymap.show_ports()
+    
+
+    
+    mymap = MapPlot(place="Europe", style="light")
+    
+    country_links = [("DEU", "FRA"), 
+                     ("FRA", "ESP"),
+                     ("DEU", "DNK"),
+                     ("DNK", "SWE"),
+                     ("DNK", "NOR"),
+                     ("DEU", "POL"),
+                     ("NOR", "SWE"),
+                     ("POL", "LTU"),
+                     ("LTU", "LVA"),
+                     ("LVA", "EST"),
+                     ("EST", "FIN"),
+                     ("SWE", "FIN"),
+                     ("DEU", "CZE"),
+                     ("POL", "CZE"),
+                     ("DEU", "AUT"),
+                     ("AUT", "CZE"),
+                     ("ESP", "PRT"),
+                     ("CZE", "SVK"),
+                     ("HUN", "AUT"),
+                     ("GBR", "IRL"),
+                     ("FRA", "BEL"),
+                     ("NLD", "BEL"),
+                     ("NLD", "DEU"),
+                     ("BEL", "DEU"),
+                     ("LUX", "DEU"),
+                     ("CHE", "DEU"),
+                     ("CHE", "FRA"),
+                     ("CHE", "AUT"),
+                     ("CHE", "ITA"),
+                     ("FRA", "ITA"),
+                     ("AUT", "ITA"),
+                     ("AUT", "SVN"),
+                     ("HRV", "SVN"),
+                     ("HRV", "SRB"),
+                     ("GRC", "ITA"),
+                     ("HUN", "ROU"),
+                     ("HRV", "HUN"),
+                     ("BGR", "ROU"),
+                     ("SRB", "ROU"),
+                     ("SRB", "BGR"),
+                     ("BGR", "GRC"),
+                     ("POL", "SVK"),
+                     ("HUN", "SVK"),
+                     ("HUN", "SRB"),
+                     ("POL", "SWE"),
+                     ("SWE", "LTU"),
+                     ("FRA", "GBR")]   
+    
+    mymap.highlight_countries(show_eu=True)
+    mymap.add_country_network(country_links)
+  #  test = [[i]+[v] for i, v in country_links]
+ #   test2 = list(set(flatten(country_links)))
+    
+    
+  #  mymap.show_ports()
    # mymap.show_airports()
-    mymap.save("cyberpunk_ports")
+   # mymap.save("cyberpunk_ports")
     #mymap.highlight_countries(country_codes=["DNK", "NOR", "SWE"])
   #  mymap.highlight_countries(region=["Northern Europe"])       
   #  mymap.highlight_countries(show_eu=True, show_cis=True)       
