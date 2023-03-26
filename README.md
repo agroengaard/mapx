@@ -1,7 +1,7 @@
  
 <div align="center">
  
- <h1 align="center">  MapX </h1>
+ <h1 align="center">  MapZ </h1>
  
   <a href="https://github.com/AndersGroengaard/mapx/issues/new?assignees=&labels=bug&template=01_BUG_REPORT.md&title=bug%3A+">Report a Bug</a>
   ·
