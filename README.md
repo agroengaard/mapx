@@ -1,7 +1,12 @@
  
 <div align="center">
+
+ <br/> 
  
  <h1 align="center">  MapZ </h1>
+ 
+ <br/> 
+ 
  
   <a href="https://github.com/AndersGroengaard/mapx/issues/new?assignees=&labels=bug&template=01_BUG_REPORT.md&title=bug%3A+">Report a Bug</a>
   ·
@@ -35,7 +40,7 @@
  
 </div>
 
-
+<br/><br/>
 
 ## Examples
 
@@ -53,6 +58,10 @@ mymap.show_ports()
 <img src="./docs/cyberpunk_ports.png" width="1000">
 </div>
 
+
+
+<br/><br/>
+
 Or to plot all the worlds airports:
 
 ```python
@@ -68,6 +77,8 @@ mymap.show_airports()
 </div>
 
 
+<br/><br/>
+
 Or to plot all the worlds urban areas on a dark theme and save the image as a png in the "saved_plots" folder:
 
 ```python
@@ -82,6 +93,10 @@ mymap.save("urban")
 <div align="center">
 <img src="./docs/dark_urban.png" width="700">
 </div>
+
+
+
+<br/><br/>
 
 ## Notes
 
