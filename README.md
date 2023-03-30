@@ -106,6 +106,7 @@ Some of the geometric country centroids that define the placement of country net
 - Portugal
 - Great Britain
 - Finland
+- USA
 
 ## Acknowledgements
 
