@@ -1,7 +1,12 @@
  
 <div align="center">
+
+ <br/> 
  
- <h1 align="center">  MapX </h1>
+ <h1 align="center">  MapZ </h1>
+ 
+ <br/> 
+ 
  
   <a href="https://github.com/AndersGroengaard/mapx/issues/new?assignees=&labels=bug&template=01_BUG_REPORT.md&title=bug%3A+">Report a Bug</a>
   ·
@@ -18,6 +23,16 @@
 [![Generic badge](https://img.shields.io/badge/Python-3.9-blue)]()
 [![Generic badge](https://img.shields.io/badge/version-0.1.0_a-green)]()
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+![Size](https://img.shields.io/github/repo-size/agroengaard/mapz)
+![GitHub top language](https://img.shields.io/github/languages/top/agroengaard/mapz)
+![GitHub last commit](https://img.shields.io/github/last-commit/agroengaard/mapz)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
  
  <br/>
@@ -25,7 +40,7 @@
  
 </div>
 
-
+<br/><br/>
 
 ## Examples
 
@@ -43,6 +58,10 @@ mymap.show_ports()
 <img src="./docs/cyberpunk_ports.png" width="1000">
 </div>
 
+
+
+<br/><br/>
+
 Or to plot all the worlds airports:
 
 ```python
@@ -57,6 +76,8 @@ mymap.show_airports()
 <img src="./docs/cyberpunk_airports.png" width="1000">
 </div>
 
+
+<br/><br/>
 
 Or to plot all the worlds urban areas on a dark theme and save the image as a png in the "saved_plots" folder:
 
@@ -73,6 +94,10 @@ mymap.save("urban")
 <img src="./docs/dark_urban.png" width="700">
 </div>
 
+
+
+<br/><br/>
+
 ## Notes
 
 Some of the geometric country centroids that define the placement of country network nodes have been manually edited for aesthetic reasons (for example, the geometric centroid of Norway is inside Sweden, or the geometric centroid of Portugal is in the Atlantic Ocean) or to better represent the population density (For example, Swedens and Great Britain's node has been moved south). The centroids that have been edited are:
@@ -81,6 +106,7 @@ Some of the geometric country centroids that define the placement of country net
 - Portugal
 - Great Britain
 - Finland
+- USA
 
 ## Acknowledgements
 
