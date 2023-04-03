@@ -1,10 +1,11 @@
- 
-import geopandas as gpd
+
+import pandas as pd
 from shapely import wkt
 import json
 
 
 def _calculate_country_centroids():
+    import geopandas as gpd
     shapefile = gpd.read_file("./shapefiles/boundaries/world-administrative-boundaries.shp")
     
     result = {}
@@ -16,7 +17,10 @@ def _calculate_country_centroids():
         
     with open('./data/country_centroids.json', 'w') as fp:
         json.dump(result, fp, indent=4)    
+
+
+
         
-_calculate_country_centroids()
+#_calculate_country_centroids()
     
  

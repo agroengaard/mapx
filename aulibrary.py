@@ -12,14 +12,14 @@ from matplotlib.colors import ListedColormap,LinearSegmentedColormap
 
 # =============================================================================
 # 
-#   Getting the AU fonts (These need to be installed on your system)
+#   Getting the AU font
 # 
 # =============================================================================
-AU     = fm.FontProperties(fname='C:\Windows\Fonts\AUPassata_RG.ttf')
-AUb    = fm.FontProperties(fname='C:\Windows\Fonts\AUPassata_Bold.ttf')
-AUl    = fm.FontProperties(fname='C:\Windows\Fonts\AUPassata_Light.ttf')
-AUp    = fm.FontProperties(fname='C:\Windows\Fonts\AU_Peto.ttf')
-AUlogo = fm.FontProperties(fname='C:\Windows\Fonts\AULogoReg.ttf')
+AU     = fm.FontProperties(fname='./fonts/AUPassata_RG.ttf')
+AUb    = fm.FontProperties(fname='./fonts/AUPassata_Bold.ttf')
+AUl    = fm.FontProperties(fname='./fonts/AUPassata_Light.ttf')
+AUp    = fm.FontProperties(fname='./fonts/AU_Peto.ttf')
+AUlogo = fm.FontProperties(fname='./fonts/AULogoReg.ttf')
 # =============================================================================
 # 
 #  Defining all the AU colors

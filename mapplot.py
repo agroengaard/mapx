@@ -36,7 +36,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Polygon
-
+import matplotlib.font_manager as fm
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 # =============================================================================
@@ -60,6 +60,8 @@ class MapPlot:
         self.style = kwargs.get("style", "light")
         self.resolution = kwargs.get("resolution", None)
         self._figsize = kwargs.get("figsize", None)
+        
+        self.title = kwargs.get("title", None)
         
         self._define_themes()
         self._define_mapmode()
@@ -111,17 +113,35 @@ class MapPlot:
         self.ax.spines["right"].set_visible(False)
         self.ax.spines["left"].set_visible(False)
         self.ax.spines["bottom"].set_visible(False)
+        
+        if self.title != None:
+          # self.ax.set_title(self.title, #fontproperties=au.AUb, 
+          #                    fontsize=18, color=au.AUblue)
+        
+            self.ax.text(.5,.95,self.title,
+                             horizontalalignment='center',
+                             fontsize=18, 
+                             fontproperties=au.AUb,
+                             color=self.theme[self.style]["title_color"],
+                             transform=self.ax.transAxes) 
+        
         plt.tight_layout()
         
         
-    def save(self, filename):
+    def save(self, **kwargs):
         """
         -----------------------------------------------------------------------
         | Method for saving the plot                                          |
         -----------------------------------------------------------------------
+        | OPTIONAL INPUT:                                                     |
+        |     filename (str): Name of the output file, fx "myplot"            |
+        |     output_folder (str): Path to the output folder, fx: "C:\\fld\\" |
+        |_____________________________________________________________________|
         """
-        self.output_folder = "./saved_plots/"
-        self.output_path = os.path.join(self.output_folder, filename+".png")
+        self.filename = kwargs.get("filename", "myplot")
+        self.output_folder = kwargs.get("output_folder", "./saved_plots/")
+        self.output_path = os.path.join(self.output_folder, 
+                                        self.filename+".png")
         plt.savefig(self.output_path, bbox_inches='tight', pad_inches=-0.1)
         
         
@@ -198,18 +218,44 @@ class MapPlot:
                 'light': {
                     'continents': au.grey,
                     'borders': 'w',
-                    'ocean': 'w'
+                    'ocean': 'w',
+                    'node_colour':au.AUblue2,
+                    'node_font_colour': au.AUblue,
+                    'highlight_country': au.AUblue4,
+                    'highlight_country_edge':'None',
+                    'pie_colormap':plt.cm.viridis,
+                    'title_color':au.AUblue,
+                    'legend_facecolor': au.AUmapgrey,
+                    'legend_edgecolor':au.AUmapgrey,
+                    'legend_fontcolor': 'black'
                     },
                 'dark':{
                     'continents': au.AUverydarkgrey,
                     'borders': au.AUverydarkgrey,
-                    'ocean': au.AUdarkgrey
+                    'ocean': au.AUdarkgrey,
+                    'node_colour':au.AUblue2,
+                    'node_font_colour': au.AUblue,
+                    'highlight_country': '#08304A',
+                    'highlight_country_edge':'#1688A1',
+                    'pie_colormap':plt.cm.cividis,
+                    'title_color':au.AUblue4,
+                    'legend_facecolor': au.AUdarkgrey,
+                    'legend_edgecolor':au.AUmapgrey,
+                    'legend_fontcolor': 'white'
                     },
                 'cyberpunk':{
                     'continents':'#212946',
                     'borders': '#3a487c',
-                   # 'borders': '#08F7FE',
-                    'ocean':'#2A3459'               
+                    'ocean':'#2A3459',
+                    'node_colour':au.AUblue3,
+                    'node_font_colour': au.AUblue4,
+                    'highlight_country': '#08304A',
+                    'highlight_country_edge':'#1688A1',
+                    'pie_colormap':plt.cm.cool,
+                    'title_color':au.AUblue4,
+                    'legend_facecolor': "#0A3645",
+                    'legend_edgecolor': "#136D8A",
+                    'legend_fontcolor': au.AUblue4
                     } 
                 }
  
@@ -440,8 +486,10 @@ class MapPlot:
             self._plot_cis()              
                     
         self.ax.add_collection(
-            PatchCollection(self.polygon_shapes, facecolor=au.AUblue4, 
-                            edgecolor='None', alpha=0.7, 
+            PatchCollection(self.polygon_shapes, 
+                            facecolor=self.theme[self.style]["highlight_country"], 
+                            edgecolor=self.theme[self.style]["highlight_country_edge"],
+                            alpha=0.7, 
                             linewidths=1, zorder=1))
 
 
@@ -452,35 +500,42 @@ class MapPlot:
  
         
  
-# =============================================================================
-#     def _i_make_piesss(self, n_pie):
-#         x_y = n_centroids.loc[n_pie].values
-#         x1, y1 = self.m(x_y[0], x_y[1])
-#         axins = inset_axes(self.ax, width=0.5, height=0.5, bbox_to_anchor=(x1, y1), loc='center',
-#                            bbox_transform=self.ax.transData, borderpad=0)
-#         pie_scale=2
-#         patches, texts = axins.pie(tech[n_pie], radius=(np.sqrt((data[n_pie]*pie_scale)/(np.pi*100))),
-#                                                 colors=[color_cat.get(x, '#333333') for x in tech.index],
-#                                                 wedgeprops={'alpha': 0.9} )
-#         return patches, texts
-#     
-#     def add_node_pie_charts(self, n):
-#     
-#         for n_pie in n:
-#             pie_slices, texts = self._i_make_piesss(n_pie)   
-#  
-# =============================================================================
-    
+
  
-    def add_country_network(self, country_links):
+   # class Network:
+# =============================================================================
+#     def country_trade(country, df, countries_col, value_col):
+#         """
+#         -------------------------------------------------------------------
+#         | Method for drawing a network of directed links with values      |
+#         -------------------------------------------------------------------
+#         | INPUT:                                                          |
+#         |    country: For example "GBR"                                   |
+#         |    df: dataframe with alpha3 value country codes in one column  |
+#         |    countries_col: Name of the column with the alpha3 country    |
+#         |                   codes.                                        |
+#         |    value_col: Name of the column that contains the link values, |
+#         |               and thus determine the displayed width of the     |
+#         |               links                                             |
+#         |_________________________________________________________________|
+#         """
+# =============================================================================
+         
+            
+    def add_country_network(self, **kwargs):
         """
         -----------------------------------------------------------------------
         | Method for drawing a network of countries onto the map plot         |
+        |                                                                     |
+        | Method 1: Supply a list of tuples with alpha3 code countries to     |
+        |           create a simple country network plot.                     |
         -----------------------------------------------------------------------
-        | INPUT:                                                              |
+        | OPTINAL INPUT:                                                      |
         |    country_links (list): List of country links as a list of tuples  |
         |                          containing iso3 codes, for example:        |
         |                          [("DEU", "FRA"), ("FRA", "ESP")]           |
+        |    df : Dataframe                                                   |
+        |    link_values (list): List of link values. Should have the         |
         -----------------------------------------------------------------------
         """
         self._load_country_centroids()
@@ -489,32 +544,143 @@ class MapPlot:
         def flatten(l):
             return [item for sublist in l for item in sublist]
         
-        nx_countries = list(set(flatten(country_links)))
-        nx_country_centroids = [self._country_o[i] for i in nx_countries]
-        print(nx_country_centroids)
         
-        nx_ctry_o_x = [o[0] for o in nx_country_centroids]
-        nx_ctry_o_y = [o[1] for o in nx_country_centroids]
+        self.country_links = kwargs.get("country_links", None)
+        self.df = kwargs.get("dataframe", None)
+        country = kwargs.get("country", None)
+        value_col = kwargs.get("value_col", None)
+        link_values = kwargs.get("link_values", None)
+        directed = kwargs.get("directed", False)
+        scale = kwargs.get("scale", 1)
+        color_countries = kwargs.get("color_countries", True)
+        
+ 
+        if self.df is not None:
+            if "from" in self.df.columns and "to" in self.df.columns:
+                self.country_links = list(zip(self.df["from"] , self.df["to"]))
+            elif "Country" in self.df.columns:            
+                self.country_links = [(country, itm) for itm in self.df["Country"].values]
+            elif all([len(col) == 3 for col in self.df.columns]) and country != None:
+                self.country_links = [(country, itm) for itm in self.df.columns]
+              
+        if self.country_links != None:                                              
+            nx_countries = list(set(flatten(self.country_links)))
+        
+        if color_countries:
+            self.highlight_countries(country_codes=nx_countries)
+    
+   
+        self.nx_country_centroids = [self._country_o[i] for i in nx_countries]
+  
+        
+        nx_ctry_o_x = [o[0] for o in self.nx_country_centroids]
+        nx_ctry_o_y = [o[1] for o in self.nx_country_centroids]
         [MX, MY] = self.m(nx_ctry_o_x, nx_ctry_o_y)
         posm = dict(zip(nx_countries, list(map(list, zip(MX, MY)))))
         
- 
+        # ------------------------ Draw the network ---------------------------
         G = nx.DiGraph()
  
         [G.add_node(n) for n in nx_countries]
         
-        nx.draw_networkx_nodes(G, posm, node_color=au.AUlightblue, 
-                               node_size=200, alpha=1, ax=self.ax)
- 
-        for j in range(len(country_links)):
-            G.add_edge(country_links[j][0], country_links[j][1], weight=2)
+        nx.draw_networkx_nodes(G, posm, node_color=self.theme[self.style]["node_colour"], 
+                               node_size=260, alpha=0.5, ax=self.ax )
+        
+        nx.draw_networkx_labels(G, posm, font_size=9, 
+                                font_color=self.theme[self.style]["node_font_colour"])
+        
+        def add_simple_edges(self):
+            for j in range(len(self.country_links)):
+                    G.add_edge(self.country_links[j][0], 
+                               self.country_links[j][1], 
+                               weight=2 * scale)
+        
+        def add_edges_with_widths(self):
+            for j in range(len(self.country_links)):
+                link_value = self.df[value_col][j]
+                if link_value > 0:
+                    G.add_edge(self.country_links[j][0], self.country_links[j][1], 
+                               weight=abs(link_value) * scale)
+                else:
+                    G.add_edge(self.country_links[j][1], self.country_links[j][0], 
+                               weight=abs(link_value) * scale)               
       
+        
+        add_simple_edges(self)
+        
         weights = [G[u][v]['weight'] for u, v in G.edges()]
  
         nx.draw_networkx_edges(G, posm, edge_color=au.AUlightblue, 
-                               width=weights, alpha=1.0, arrows=False,
-                                ax=self.ax)
+                               width=weights, alpha=0.5, 
+                               arrows=directed,
+                               connectionstyle="arc3,rad=0.1",
+                               ax=self.ax)
  
+    
+    def _add_country_pie(self, n_pie, **kwargs):
+        """
+        -----------------------------------------------------------------------
+        | Method for adding a pie chart in the center of a country            |
+        -----------------------------------------------------------------------
+        """
+        
+        self.pie_origo = self._country_o[n_pie]
+        
+        
+        x1, y1 = self.m(self.pie_origo[0], self.pie_origo[1])
+        axins = inset_axes(self.ax, width=0.5, height=0.5, bbox_to_anchor=(x1, y1), loc='center',
+                           bbox_transform=self.ax.transData, borderpad=0)
+        pie_scale=1
+        
+        
+        pie_cmap = kwargs.get("pie_cmap", self.theme[self.style]["pie_colormap"])
+        
+        pie_colors = [*pie_cmap(np.linspace(0, 1, self.pie_df[n_pie].shape[0]))]
+        
+        patches, texts = axins.pie(self.pie_df[n_pie], 
+                                 radius=pie_scale,
+                                 colors=pie_colors,
+                                 wedgeprops={'alpha': 1.0} )
+        return patches, texts
+    
+    def add_pie_charts(self, **kwargs):
+        
+        self._load_country_centroids()
+        
+        self.pie_df = kwargs.get("dataframe", None)
+        self._legend = kwargs.get("legend", True)
+        
+        pie_cmap = kwargs.get("pie_cmap", self.theme[self.style]["pie_colormap"])
+        
+        if self.pie_df is not None:
+            if all([len(col) == 3 for col in self.pie_df.columns]):
+                self.pie_countries = self.pie_df.columns    
+                
+            for n_pie in self.pie_countries:
+                pie_slices, texts = self._add_country_pie(n_pie, 
+                                                          pie_cmap=pie_cmap)   
+                
+            if self._legend == True:
+                self.legend_font = fm.FontProperties(family='AU Passata', 
+                                                     weight="regular", 
+                                                     size=12)
+                pie_legend = self.ax.legend(pie_slices, self.pie_df.index, 
+                                            facecolor=self.theme[self.style]["legend_facecolor"], 
+                                            edgecolor=self.theme[self.style]["legend_edgecolor"],
+                                            labelcolor=self.theme[self.style]["legend_fontcolor"],
+                                            framealpha=1,
+                                            prop=self.legend_font
+                                 #      bbox_to_anchor=(0.00, -0.15), 
+                               #        loc="upper left",# ncol=6, 
+                                       #prop=font
+                                       )                        
+                self.ax.add_artist(pie_legend)
+
+        else:
+            print("no dataframe supplied")
+    
+    
+    
 if __name__ == "__main__":
 
     
