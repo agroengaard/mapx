@@ -98,6 +98,10 @@ mymap.save("urban")
 
 <br/><br/>
 
+
+### Plots with networks
+
+
 Another example, could be combining a map plot with a network plot, and also pie plots for each country. See for the following exapmle with some made up data for finnish metal "exports":
 
 
