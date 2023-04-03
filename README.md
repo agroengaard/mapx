@@ -98,7 +98,51 @@ mymap.save("urban")
 
 <br/><br/>
 
+
+### Plots with networks
+
+
+Another example, could be combining a map plot with a networks plot, and also pie plots for each country. See for the following example with some made up data for finnish metal "exports":
+
+
+```python
+from mapplot import MapPlot
+import pandas as pd
+
+mydict = {"DEU": {"Metal": 3, "Death Metal":4, "Black Metal":2, "Folk Metal":1},
+          "POL": {"Metal": 2, "Death Metal":1, "Black Metal":1, "Folk Metal":3},
+          "DNK": {"Metal": 5, "Death Metal":3, "Black Metal":2, "Folk Metal":1},
+          "NOR": {"Metal": 1, "Death Metal":4, "Black Metal":9, "Folk Metal":3},
+          "ISL": {"Metal": 1, "Death Metal":4, "Black Metal":4, "Folk Metal":8}
+          }
+
+df = pd.DataFrame.from_dict(mydict)
+mymap = MapPlot(place="Europe", style="cyberpunk", title="Finnish Metal Music Export")
+mymap.add_country_network(country="FIN", dataframe=df, directed=True)
+mymap.add_pie_charts(dataframe=df)
+mymap.save()
+ 
+```
+
+From which you should be able to produce the folloing plot:
+
+<div align="center">
+<img src="./docs/pie_plot_example.png" width="700">
+</div>
+
+You should be able to replacate this example with any data you like and for any countries you would like, as long as you follow the dataframe structure in the example.
+
+
+
+
+<br/><br/>
+
 ## Notes
+
+Available styles in the time of writing are:
+- light
+- dark
+- cyberpunk
 
 Some of the geometric country centroids that define the placement of country network nodes have been manually edited for aesthetic reasons (for example, the geometric centroid of Norway is inside Sweden, or the geometric centroid of Portugal is in the Atlantic Ocean) or to better represent the population density (For example, Swedens and Great Britain's node has been moved south). The centroids that have been edited are:
 - Norway
