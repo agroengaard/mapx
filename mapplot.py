@@ -617,6 +617,10 @@ class MapPlot:
                                ax=self.ax)
  
     
+    # =========================================================================
+    #      Pie Chart code
+    # =========================================================================
+
     def _add_country_pie(self, n_pie, **kwargs):
         """
         -----------------------------------------------------------------------
@@ -628,7 +632,8 @@ class MapPlot:
         
         
         x1, y1 = self.m(self.pie_origo[0], self.pie_origo[1])
-        axins = inset_axes(self.ax, width=0.5, height=0.5, bbox_to_anchor=(x1, y1), loc='center',
+        axins = inset_axes(self.ax, width=0.5, height=0.5, 
+                           bbox_to_anchor=(x1, y1), loc='center',
                            bbox_transform=self.ax.transData, borderpad=0)
         pie_scale=1
         
@@ -644,13 +649,26 @@ class MapPlot:
         return patches, texts
     
     def add_pie_charts(self, **kwargs):
-        
+        """
+        -----------------------------------------------------------------------
+        | Method for adding pie charts on each country node based on a        |
+        | dataframe.                                                          |
+        -----------------------------------------------------------------------
+        | POSSIBLE INPUT:
+        |     dataframe : the pandas dataframe to plot piechart data for.
+        |                 Must have the the folloing structure;
+        |                      - country alpha-3 codes as columns
+        |                      - data categories as indices
+        |     legend (bool): True or False for whether or not to plot a 
+        |                    legend.
+        |     pie_cmap : Pie plot color map to use for the coloring.
+        |______________________________________________________________________
+        """
         self._load_country_centroids()
         
         self.pie_df = kwargs.get("dataframe", None)
-        self._legend = kwargs.get("legend", True)
-        
-        pie_cmap = kwargs.get("pie_cmap", self.theme[self.style]["pie_colormap"])
+        self._legend = kwargs.get("legend", True)   
+        self.pie_cmap = kwargs.get("pie_cmap", self.theme[self.style]["pie_colormap"])
         
         if self.pie_df is not None:
             if all([len(col) == 3 for col in self.pie_df.columns]):
@@ -658,7 +676,7 @@ class MapPlot:
                 
             for n_pie in self.pie_countries:
                 pie_slices, texts = self._add_country_pie(n_pie, 
-                                                          pie_cmap=pie_cmap)   
+                                                          pie_cmap=self.pie_cmap)   
                 
             if self._legend == True:
                 self.legend_font = fm.FontProperties(family='AU Passata', 
@@ -672,13 +690,29 @@ class MapPlot:
                                             prop=self.legend_font
                                  #      bbox_to_anchor=(0.00, -0.15), 
                                #        loc="upper left",# ncol=6, 
-                                       #prop=font
+                                      
                                        )                        
                 self.ax.add_artist(pie_legend)
 
         else:
             print("no dataframe supplied")
     
+    def _add_country_bar(self, width, data, country, bcolors):
+ 
+        self.pie_origo = self._country_o[country]
+        x1, y1 = self.m(self.pie_origo[0], self.pie_origo[1])
+   
+        ax_h = inset_axes(self.ax, width=width, height= 1, loc='lower center',
+                          bbox_to_anchor=(x1, y1),
+                          bbox_transform=self.ax.transData, borderpad=0, 
+                          axes_kwargs={'alpha': 0.35, 'visible': True})
+        for i in range(len(data.columns)):
+            ax_h.bar(data.columns[i], data.loc[country].values[i], 
+                     label=data.columns[i],
+                     fc=bcolors[i])
+        ax_h.set_ylim([0, 85])
+        ax_h.axis('off')
+        return ax_h
     
     
 if __name__ == "__main__":
