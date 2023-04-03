@@ -139,6 +139,11 @@ You should be able to replacate this example with any data you like and for any 
 
 ## Notes
 
+Available styles in the time of writing are:
+- light
+- dark
+- cybrepunk
+
 Some of the geometric country centroids that define the placement of country network nodes have been manually edited for aesthetic reasons (for example, the geometric centroid of Norway is inside Sweden, or the geometric centroid of Portugal is in the Atlantic Ocean) or to better represent the population density (For example, Swedens and Great Britain's node has been moved south). The centroids that have been edited are:
 - Norway
 - Sweden
