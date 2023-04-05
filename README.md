@@ -142,10 +142,11 @@ You should be able to replacate this example with any data you like and for any 
 Available regions that you can specify in the the "place" parameter when calling "MapPlot" are:
 - Africa
 - Asia
+- Eurasia
 - Europe
 - North America
 - South America
-- Oeania
+- Middle East
 - Norway
 - Sweden
 - Denmark
