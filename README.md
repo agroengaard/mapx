@@ -139,7 +139,20 @@ You should be able to replacate this example with any data you like and for any 
 
 ## Notes
 
-Available styles in the time of writing are:
+Available regions that you can specify in the the "place" parameter when calling "MapPlot" are:
+- Africa
+- Asia
+- Europe
+- North America
+- South America
+- Oeania
+- Norway
+- Sweden
+- Denmark
+I can add more if anyone requests them.
+
+
+Available styles that you can specify under the "style" parameter when calling "MapPlot", in the time of writing are:
 - light
 - dark
 - cyberpunk
