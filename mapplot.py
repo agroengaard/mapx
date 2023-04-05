@@ -209,6 +209,18 @@ class MapPlot:
                             'projection': 'laea',
                             'resolution': 'i'
                             }
+                    
+        elif self.place == "North America":
+            self.mapmode = {'definition': 'center_and_height_width',
+                            'figsize': (12,12),
+                            'width': 8000000,
+                            'height': 9000000,
+                            'lat_0': 45,
+                            'lon_0':-102,
+                            'lat_ts': 45,
+                            'projection': 'laea',
+                            'resolution': 'i'
+                            }
         elif self.place == "Africa":
             self.mapmode = {'definition': 'center_and_height_width',
                             'figsize': (12,12),

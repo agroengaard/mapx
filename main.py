@@ -49,4 +49,4 @@ import pandas as pd
 # #mymap.save()
 # =============================================================================
 
-mymap2 = MapPlot(place="Middle East", style="light", title="Coffee Production")
+mymap2 = MapPlot(place="North America", style="light", title="Coffee Production")
