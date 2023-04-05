@@ -36,6 +36,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Polygon
+import matplotlib.patches as mpatches
 import matplotlib.font_manager as fm
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -787,12 +788,17 @@ class MapPlot:
                           bbox_to_anchor=(x1, y1),
                           bbox_transform=self.ax.transData, borderpad=0, 
                           axes_kwargs={'alpha': 0.35, 'visible': True})
+        
+        bar_cmap = kwargs.get("pie_cmap", self.theme[self.style]["pie_colormap"])
+        
+        bar_colors = [*bar_cmap(np.linspace(0, 1, self.bar_df[country].shape[0]))]
+        
         for i in range(len(self.bar_df.index)):
        
             ax_h.bar(self.bar_df.index[i], 
                      self.bar_df[country].values[i], 
                      label=self.bar_df.index[i],
-                    # fc=bcolors[i]
+                     fc=bar_colors[i]
                      )
        # ax_h.set_ylim([0, 85])
         ax_h.axis('off')
@@ -822,9 +828,23 @@ class MapPlot:
                 ax_h = self._add_country_bar(n_pie, 
                                              bar_cmap=self.bar_cmap, 
                                              width=width)   
-    
-    
-    
+        bar_cmap = kwargs.get("pie_cmap", self.theme[self.style]["pie_colormap"])
+        
+        if self._legend == True:
+            bar_colors = [*bar_cmap(np.linspace(0, 1, len(self.bar_df.index)))]
+            patches = [mpatches.Patch(color=bar_colors[i], label=self.bar_df.index[i]) for i in range(len(self.bar_df.index))]
+            self.legend_font = fm.FontProperties(family='AU Passata', 
+                                                 weight="regular", 
+                                                 size=12)
+            self.ax.legend(handles=patches, loc=1,
+                           facecolor=self.theme[self.style]["legend_facecolor"], 
+                           edgecolor=self.theme[self.style]["legend_edgecolor"],
+                           labelcolor=self.theme[self.style]["legend_fontcolor"],
+                           framealpha=1,
+                           prop=self.legend_font
+                           
+                           )
+        
     
     
 if __name__ == "__main__":
