@@ -149,6 +149,7 @@ Available regions that you can specify in the the "place" parameter when calling
 - Norway
 - Sweden
 - Denmark
+
 I can add more if anyone requests them.
 
 
