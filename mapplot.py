@@ -166,6 +166,7 @@ class MapPlot:
       
         elif self.place == "Norway":
             self.mapmode = {'definition': 'center_and_height_width',
+                            'figsize': (12,12),
                             'width': 1400000,
                             'height': 1400000,
                             'lat_0': 56,
@@ -176,6 +177,7 @@ class MapPlot:
               
         elif self.place == "Sweden":
             self.mapmode = {'definition': 'center_and_height_width',
+                            'figsize': (12,12),
                             'width': 1500000,
                             'height': 1500000,
                             'lat_0': 57,
@@ -186,6 +188,7 @@ class MapPlot:
             
         elif self.place == "Denmark":
             self.mapmode = {'definition': 'center_and_height_width',
+                            'figsize': (12,12),
                             'width': 400000,
                             'height': 400000,
                             'lat_0': 56,
@@ -194,6 +197,63 @@ class MapPlot:
                             'projection': 'laea',
                             'resolution': 'i'
                             }
+        
+        elif self.place == "South America":
+            self.mapmode = {'definition': 'center_and_height_width',
+                            'figsize': (12,12),
+                            'width': 8000000,
+                            'height': 9000000,
+                            'lat_0': -19,
+                            'lon_0':-62,
+                            'lat_ts': -19,
+                            'projection': 'laea',
+                            'resolution': 'i'
+                            }
+        elif self.place == "Africa":
+            self.mapmode = {'definition': 'center_and_height_width',
+                            'figsize': (12,12),
+                            'width': 9000000,
+                            'height':9000000,
+                            'lat_0': 2,
+                            'lon_0':17,
+                            'lat_ts': 2,
+                            'projection': 'laea',
+                            'resolution': 'i'
+                            }
+        elif self.place == "Middle East":
+            self.mapmode = {'definition': 'center_and_height_width',
+                            'figsize': (12,12),
+                            'width':  4000000,
+                            'height': 4000000,
+                            'lat_0': 26,
+                            'lon_0':45,
+                            'lat_ts': 26,
+                            'projection': 'laea',
+                            'resolution': 'l'
+                            }
+        elif self.place == "Asia":
+            self.mapmode = {'definition': 'center_and_height_width',
+                            'figsize': (12,12),
+                            'width':  9000000,
+                            'height': 9000000,
+                            'lat_0': 45,
+                            'lon_0':90,
+                            'lat_ts': 45,
+                            'projection': 'laea',
+                            'resolution': 'l'
+                            }
+        elif self.place == "Eurasia":
+            self.mapmode = {'definition': 'center_and_height_width',
+                            'figsize': (12,12),
+                            'width':  11000000,
+                            'height': 11000000,
+                            'lat_0': 55,
+                            'lon_0':70,
+                            'lat_ts': 55,
+                            'projection': 'laea',
+                            'resolution': 'l'
+                            }
+        
         else:
             self.mapmode = {   
                 'figsize': (16,9),
@@ -654,15 +714,15 @@ class MapPlot:
         | Method for adding pie charts on each country node based on a        |
         | dataframe.                                                          |
         -----------------------------------------------------------------------
-        | POSSIBLE INPUT:
-        |     dataframe : the pandas dataframe to plot piechart data for.
-        |                 Must have the the folloing structure;
-        |                      - country alpha-3 codes as columns
-        |                      - data categories as indices
-        |     legend (bool): True or False for whether or not to plot a 
-        |                    legend.
-        |     pie_cmap : Pie plot color map to use for the coloring.
-        |______________________________________________________________________
+        | POSSIBLE INPUT:                                                     |
+        |     dataframe : the pandas dataframe to plot piechart data for.     |
+        |                 Must have the the folloing structure;               |
+        |                      - country alpha-3 codes as columns             |
+        |                      - data categories as indices                   |
+        |     legend (bool): True or False for whether or not to plot a       |  
+        |                    legend.                                          |
+        |     pie_cmap : Pie plot color map to use for the coloring.          |
+        |_____________________________________________________________________|
         """
         self._load_country_centroids()
         
@@ -697,8 +757,17 @@ class MapPlot:
         else:
             print("no dataframe supplied")
     
-    def _add_country_bar(self, width, data, country, bcolors):
- 
+    # =========================================================================
+    #  Bar chart code
+    # =========================================================================
+    
+    def _add_country_bar(self, country, **kwargs):
+        """
+        -----------------------------------------------------------------------
+        |  Method for adding a single bar plot to a single country            | 
+        -----------------------------------------------------------------------
+        """
+        width = kwargs.get("width", 1)
         self.pie_origo = self._country_o[country]
         x1, y1 = self.m(self.pie_origo[0], self.pie_origo[1])
    
@@ -706,13 +775,44 @@ class MapPlot:
                           bbox_to_anchor=(x1, y1),
                           bbox_transform=self.ax.transData, borderpad=0, 
                           axes_kwargs={'alpha': 0.35, 'visible': True})
-        for i in range(len(data.columns)):
-            ax_h.bar(data.columns[i], data.loc[country].values[i], 
-                     label=data.columns[i],
-                     fc=bcolors[i])
-        ax_h.set_ylim([0, 85])
+        for i in range(len(self.bar_df.index)):
+       
+            ax_h.bar(self.bar_df.index[i], 
+                     self.bar_df[country].values[i], 
+                     label=self.bar_df.index[i],
+                    # fc=bcolors[i]
+                     )
+       # ax_h.set_ylim([0, 85])
         ax_h.axis('off')
         return ax_h
+    
+    
+    def add_bar_plots(self, **kwargs):
+        """
+        -----------------------------------------------------------------------
+        | Method for adding bar plots from a dataframe onto individual        |
+        | countries.                                                          |
+        -----------------------------------------------------------------------
+        """
+        self._load_country_centroids()
+        
+        self.bar_df = kwargs.get("dataframe", None)
+        self._legend = kwargs.get("legend", True)   
+        self.bar_cmap = kwargs.get("pie_cmap", 
+                                   self.theme[self.style]["pie_colormap"])
+        width = kwargs.get("width", 1)
+        
+        if self.bar_df is not None:
+            if all([len(col) == 3 for col in self.bar_df.columns]):
+                self.pie_countries = self.bar_df.columns    
+                
+            for n_pie in self.pie_countries:
+                ax_h = self._add_country_bar(n_pie, 
+                                             bar_cmap=self.bar_cmap, 
+                                             width=width)   
+    
+    
+    
     
     
 if __name__ == "__main__":
