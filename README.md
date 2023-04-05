@@ -99,6 +99,35 @@ mymap.save("urban")
 <br/><br/>
 
 
+### Plots with diagrams
+
+To plot bar plots on each country (Here with some made up data for some South American countries):
+
+```python
+from mapplot import MapPlot
+import pandas as pd
+
+mydict = {"BRA": {"Coffee": 3, "Cocoa":4, "Beef":2, "Rubber":1},
+          "COL": {"Coffee": 2, "Cocoa":1, "Beef":1, "Rubber":3},
+          "PER": {"Coffee": 5, "Cocoa":3, "Beef":2, "Rubber":1},
+          "ARG": {"Coffee": 1, "Cocoa":4, "Beef":9, "Rubber":3},
+          "VEN": {"Coffee": 1, "Cocoa":4, "Beef":9, "Rubber":3}
+          }
+
+df = pd.DataFrame.from_dict(mydict)
+mymap = MapPlot(place="South America", style="light", title="South America Exports")
+mymap.highlight_countries(country_codes=list(df.columns))    
+mymap.add_bar_plots(dataframe=df, width=0.25)
+mymap.save()
+```
+
+<div align="center">
+<img src="./docs/bar_plot_example.png" width="700">
+</div>
+
+
+
+
 ### Plots with networks
 
 
