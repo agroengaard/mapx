@@ -897,39 +897,16 @@ class MapPlot:
                                                alpha=0.5, 
                                                ax=self.ax)
  
-                    secondary_nodes_legend = ax.scatter(0, 0, s=50, 
-                                                        color=au.AUblue,
-                                                        edgecolors=au.white, 
-                                                        linewidths=lw,
-                                                        alpha=0.3, 
-                                                        label="Storage Capacity")
+                    _n_legend = self.ax.scatter(0, 0, s=50, 
+                                                color=None,
+                                                edgecolors=circle_colors[v], 
+                                                linewidths=lw,
+                                                alpha=0.5, 
+                                                label=self.circle_df.index[v])
  
-    
-if __name__ == "__main__":
-
-
-    mymap = MapPlot(place="Europe", style="cyberpunk")
-    
-    country_links = [("DEU", "FRA"), ("FRA", "ESP"), ("DEU", "DNK"),
-                     ("DNK", "SWE"), ("DNK", "NOR"), ("DEU", "POL"),
-                     ("NOR", "SWE"), ("POL", "LTU"), ("LTU", "LVA"),
-                     ("LVA", "EST"), ("EST", "FIN"), ("SWE", "FIN"),
-                     ("DEU", "CZE"), ("POL", "CZE"), ("DEU", "AUT"),
-                     ("AUT", "CZE"), ("ESP", "PRT"), ("CZE", "SVK"),
-                     ("HUN", "AUT"), ("GBR", "IRL"), ("FRA", "BEL"),
-                     ("NLD", "BEL"), ("NLD", "DEU"), ("BEL", "DEU"),
-                     ("LUX", "DEU"), ("CHE", "DEU"), ("CHE", "FRA"),
-                     ("CHE", "AUT"), ("CHE", "ITA"), ("FRA", "ITA"),
-                     ("AUT", "ITA"), ("AUT", "SVN"), ("HRV", "SVN"),
-                     ("HRV", "SRB"), ("GRC", "ITA"), ("HUN", "ROU"),
-                     ("HRV", "HUN"), ("BGR", "ROU"), ("SRB", "ROU"),
-                     ("SRB", "BGR"), ("BGR", "GRC"), ("POL", "SVK"),
-                     ("HUN", "SVK"), ("HUN", "SRB"), ("POL", "SWE"),
-                     ("SWE", "LTU"), ("FRA", "GBR")]   
-    
-    mymap.add_country_network(link_values=country_links)
-
-
+        leg1 = self.ax.legend(scatterpoints=1, bbox_to_anchor=(0.01, 0.98), loc="upper left")
+        font = fm.FontProperties(family='AU Passata', size=10, weight="regular")
+ 
 
 
   #  mymap3 = MapPlot(place="Denmark")
