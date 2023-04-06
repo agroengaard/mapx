@@ -154,7 +154,9 @@ The may be defined from various ways, for example from a list of tuples:
     mymap.add_country_network(link_values=country_links)
 ```
 
-
+<div align="center">
+<img src="./docs/network_plot_example.png" width="700">
+</div>
 
 
 
@@ -184,7 +186,7 @@ mymap.save()
  
 ```
 
-From which you should be able to produce the folloing plot:
+From which you should be able to produce the following plot:
 
 <div align="center">
 <img src="./docs/pie_plot_example.png" width="700">
