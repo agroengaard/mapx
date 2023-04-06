@@ -635,10 +635,14 @@ class MapPlot:
                 self.country_links = [(country, itm) for itm in self.df["Country"].values]
             elif all([len(col) == 3 for col in self.df.columns]) and country != None:
                 self.country_links = [(country, itm) for itm in self.df.columns]
-              
+        elif link_values != None:
+            self.country_links = link_values
+                
         if self.country_links != None:                                              
             nx_countries = list(set(flatten(self.country_links)))
-        
+      #  elif link_values != None:
+     #       nx_countries=  list(set(flatten(link_values)))
+            
         if color_countries:
             self.highlight_countries(country_codes=nx_countries)
     
@@ -686,7 +690,7 @@ class MapPlot:
         nx.draw_networkx_edges(G, posm, edge_color=au.AUlightblue, 
                                width=weights, alpha=0.5, 
                                arrows=directed,
-                               connectionstyle="arc3,rad=0.1",
+                               connectionstyle="arc3,rad=0.3",
                                ax=self.ax)
  
     
@@ -845,81 +849,89 @@ class MapPlot:
                            
                            )
         
-    
+    # =========================================================================
+    #  Circle Plot Code
+    # =========================================================================    
+ 
+    def add_circle_plots(self, **kwargs):
+        """
+        -----------------------------------------------------------------------
+        | Method for adding circle plots                                      |
+        -----------------------------------------------------------------------
+        """
+        self._load_country_centroids()
+        
+        self.circle_df = kwargs.get("dataframe", None)
+        self._legend = kwargs.get("legend", True)   
+        self.circle_cmap = kwargs.get("pie_cmap", 
+                                   self.theme[self.style]["pie_colormap"])
+        scale = kwargs.get("scale", 1)
+        lw = kwargs.get("linewidth", 3)
+        
+        if self.circle_df is not None:
+            if all([len(col) == 3 for col in self.circle_df.columns]):
+                self.pie_countries = self.circle_df.columns    
+                
+                nx_country_centroids = [self._country_o[i] for i in self.pie_countries]
+                nx_ctry_o_x = [o[0] for o in nx_country_centroids]
+                nx_ctry_o_y = [o[1] for o in nx_country_centroids]
+                [MX, MY] = self.m(nx_ctry_o_x, nx_ctry_o_y)
+                posm = dict(zip(self.pie_countries, list(map(list, zip(MX, MY)))))    
+                
+                n_categories = len(self.circle_df.index)
+                bar_cmap = kwargs.get("pie_cmap", self.theme[self.style]["pie_colormap"]) 
+                circle_colors = [*bar_cmap(np.linspace(0, 1, n_categories))]
+                
+                for v in range(n_categories):
+                    G = nx.DiGraph()    
+                    node_sizes = self.circle_df.loc[self.circle_df.index[v]].values.tolist()
+                    node_sizes = [i * scale for i in node_sizes]
+                    for c in range(len(self.circle_df.columns)):
+                        [G.add_node(n) for n in self.pie_countries]
+                        
+                        nx.draw_networkx_nodes(G, posm, 
+                                               node_color='none',
+                                               edgecolors=circle_colors[v],
+                                               linewidths=lw,
+                                               node_size=node_sizes,
+                                               alpha=0.5, 
+                                               ax=self.ax)
+ 
+                    secondary_nodes_legend = ax.scatter(0, 0, s=50, 
+                                                        color=au.AUblue,
+                                                        edgecolors=au.white, 
+                                                        linewidths=lw,
+                                                        alpha=0.3, 
+                                                        label="Storage Capacity")
+ 
     
 if __name__ == "__main__":
 
-    
 
+    mymap = MapPlot(place="Europe", style="cyberpunk")
     
-    mymap = MapPlot(place="Europe", style="light")
+    country_links = [("DEU", "FRA"), ("FRA", "ESP"), ("DEU", "DNK"),
+                     ("DNK", "SWE"), ("DNK", "NOR"), ("DEU", "POL"),
+                     ("NOR", "SWE"), ("POL", "LTU"), ("LTU", "LVA"),
+                     ("LVA", "EST"), ("EST", "FIN"), ("SWE", "FIN"),
+                     ("DEU", "CZE"), ("POL", "CZE"), ("DEU", "AUT"),
+                     ("AUT", "CZE"), ("ESP", "PRT"), ("CZE", "SVK"),
+                     ("HUN", "AUT"), ("GBR", "IRL"), ("FRA", "BEL"),
+                     ("NLD", "BEL"), ("NLD", "DEU"), ("BEL", "DEU"),
+                     ("LUX", "DEU"), ("CHE", "DEU"), ("CHE", "FRA"),
+                     ("CHE", "AUT"), ("CHE", "ITA"), ("FRA", "ITA"),
+                     ("AUT", "ITA"), ("AUT", "SVN"), ("HRV", "SVN"),
+                     ("HRV", "SRB"), ("GRC", "ITA"), ("HUN", "ROU"),
+                     ("HRV", "HUN"), ("BGR", "ROU"), ("SRB", "ROU"),
+                     ("SRB", "BGR"), ("BGR", "GRC"), ("POL", "SVK"),
+                     ("HUN", "SVK"), ("HUN", "SRB"), ("POL", "SWE"),
+                     ("SWE", "LTU"), ("FRA", "GBR")]   
     
-    country_links = [("DEU", "FRA"), 
-                     ("FRA", "ESP"),
-                     ("DEU", "DNK"),
-                     ("DNK", "SWE"),
-                     ("DNK", "NOR"),
-                     ("DEU", "POL"),
-                     ("NOR", "SWE"),
-                     ("POL", "LTU"),
-                     ("LTU", "LVA"),
-                     ("LVA", "EST"),
-                     ("EST", "FIN"),
-                     ("SWE", "FIN"),
-                     ("DEU", "CZE"),
-                     ("POL", "CZE"),
-                     ("DEU", "AUT"),
-                     ("AUT", "CZE"),
-                     ("ESP", "PRT"),
-                     ("CZE", "SVK"),
-                     ("HUN", "AUT"),
-                     ("GBR", "IRL"),
-                     ("FRA", "BEL"),
-                     ("NLD", "BEL"),
-                     ("NLD", "DEU"),
-                     ("BEL", "DEU"),
-                     ("LUX", "DEU"),
-                     ("CHE", "DEU"),
-                     ("CHE", "FRA"),
-                     ("CHE", "AUT"),
-                     ("CHE", "ITA"),
-                     ("FRA", "ITA"),
-                     ("AUT", "ITA"),
-                     ("AUT", "SVN"),
-                     ("HRV", "SVN"),
-                     ("HRV", "SRB"),
-                     ("GRC", "ITA"),
-                     ("HUN", "ROU"),
-                     ("HRV", "HUN"),
-                     ("BGR", "ROU"),
-                     ("SRB", "ROU"),
-                     ("SRB", "BGR"),
-                     ("BGR", "GRC"),
-                     ("POL", "SVK"),
-                     ("HUN", "SVK"),
-                     ("HUN", "SRB"),
-                     ("POL", "SWE"),
-                     ("SWE", "LTU"),
-                     ("FRA", "GBR")]   
-    
-    mymap.highlight_countries(show_eu=True)
-    mymap.add_country_network(country_links)
-  #  test = [[i]+[v] for i, v in country_links]
- #   test2 = list(set(flatten(country_links)))
-    
-    
-  #  mymap.show_ports()
-   # mymap.show_airports()
-   # mymap.save("cyberpunk_ports")
-    #mymap.highlight_countries(country_codes=["DNK", "NOR", "SWE"])
-  #  mymap.highlight_countries(region=["Northern Europe"])       
-  #  mymap.highlight_countries(show_eu=True, show_cis=True)       
-     
+    mymap.add_country_network(link_values=country_links)
 
-#
-  #  mymap2 = MapPlot(place="Europe", style="dark")
- #   mymap2.show_urban_areas()
-    
+
+
+
   #  mymap3 = MapPlot(place="Denmark")
   #  mymap3.show_urban_areas()
     

@@ -42,9 +42,27 @@ mydict = {"BRA": {"Coffee": 3, "Cocoa":4, "Beef":2, "Rubber":1},
           }
 
 df = pd.DataFrame.from_dict(mydict)
-mymap = MapPlot(place="South America", style="light", title="South America Exports")
-mymap.highlight_countries(country_codes=list(df.columns))    
-mymap.add_bar_plots(dataframe=df, width=0.25)
-mymap.save()
 
-#mymap2 = MapPlot(place="North America", style="light", title="Coffee Production")
+# =============================================================================
+# # Example 1:
+# barplot = MapPlot(place="South America", style="light", title="South America Exports")
+# barplot.highlight_countries(country_codes=list(df.columns))    
+# barplot.add_bar_plots(dataframe=df, width=0.25)
+# barplot.save(filename="bar_example")
+# 
+# # Example 2:
+# barplot = MapPlot(place="South America", style="light", title="South America Exports")
+# barplot.highlight_countries(country_codes=list(df.columns))    
+# barplot.add_pie_charts(dataframe=df)
+# barplot.save(filename="pie_example")
+# 
+# =============================================================================
+# Example 3:
+    
+barplot = MapPlot(place="South America", style="light", title="South America Exports")
+barplot.highlight_countries(country_codes=list(df.columns))    
+barplot.add_circle_plots(dataframe=df, scale=300, linewidth=2)
+#barplot.save(filename="pie_example")
+
+
+
