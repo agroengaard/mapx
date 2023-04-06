@@ -125,10 +125,41 @@ mymap.save()
 <img src="./docs/bar_plot_example.png" width="700">
 </div>
 
-
-
-
 ### Plots with networks
+
+
+To add a network plot to the map, call the "add_country_network()" method from the MapPlot class.
+The may be defined from various ways, for example from a list of tuples:
+
+```python
+    mymap = MapPlot(place="Europe", style="cyberpunk")
+    
+    country_links = [("DEU", "FRA"), ("FRA", "ESP"), ("DEU", "DNK"),
+                     ("DNK", "SWE"), ("DNK", "NOR"), ("DEU", "POL"),
+                     ("NOR", "SWE"), ("POL", "LTU"), ("LTU", "LVA"),
+                     ("LVA", "EST"), ("EST", "FIN"), ("SWE", "FIN"),
+                     ("DEU", "CZE"), ("POL", "CZE"), ("DEU", "AUT"),
+                     ("AUT", "CZE"), ("ESP", "PRT"), ("CZE", "SVK"),
+                     ("HUN", "AUT"), ("GBR", "IRL"), ("FRA", "BEL"),
+                     ("NLD", "BEL"), ("NLD", "DEU"), ("BEL", "DEU"),
+                     ("LUX", "DEU"), ("CHE", "DEU"), ("CHE", "FRA"),
+                     ("CHE", "AUT"), ("CHE", "ITA"), ("FRA", "ITA"),
+                     ("AUT", "ITA"), ("AUT", "SVN"), ("HRV", "SVN"),
+                     ("HRV", "SRB"), ("GRC", "ITA"), ("HUN", "ROU"),
+                     ("HRV", "HUN"), ("BGR", "ROU"), ("SRB", "ROU"),
+                     ("SRB", "BGR"), ("BGR", "GRC"), ("POL", "SVK"),
+                     ("HUN", "SVK"), ("HUN", "SRB"), ("POL", "SWE"),
+                     ("SWE", "LTU"), ("FRA", "GBR")]   
+    
+    mymap.add_country_network(link_values=country_links)
+```
+
+
+
+
+
+
+### Combined Plots
 
 
 Another example, could be combining a map plot with a networks plot, and also pie plots for each country. See for the following example with some made up data for finnish metal "exports":
